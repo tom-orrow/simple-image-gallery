@@ -1,0 +1,28 @@
+.row
+  .span7
+    %h1= @album.name
+  .span5{ style: "margin-top: 15px" }
+    %span.pull-right
+      = link_to albums_path, class: "btn" do
+        %i.icon-arrow-left
+      .btn#editImages
+        %i.icon-edit
+      .btn.fileinput-button
+        %i.icon-folder-open
+          = form_for @album, :url => add_image_album_path, :html => { multipart: true, id: "fileupload" } do |f|
+            = f.hidden_field :album_id, value: @album.id
+            = f.file_field :image, multiple: true, name: "album[image]"
+
+#gallery{ data: { toggle: "modal-gallery", target: "#modal-gallery" }}
+  %ul#images.thumbnails
+    - @album.images.each do |image|
+      = render "image", image: image
+
+#modal-gallery.modal.modal-gallery.hide.fade{ tabindex: "-1" }
+  .modal-body
+    .modal-image
+
+#progressbar.hide
+  .modal-backdrop.in
+  #progress.progress.progress-striped.modal
+    .bar{ style: "width: 0%" }

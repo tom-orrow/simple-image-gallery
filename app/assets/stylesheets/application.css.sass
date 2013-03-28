@@ -1,0 +1,66 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require_tree .
+ */
+
+@import 'bootstrap'
+@import 'jquery.fileupload-ui'
+
+body
+  padding-top: 60px
+
+.media
+  #editButtons
+  .close
+    color: black
+    opacity: 0.8
+  .thumbnail
+    height: 80px
+  .media-body
+    margin-right: 10px
+#images
+  .span2
+    width: auto
+    margin-left: 4px
+    margin-bottom: 4px
+    .thumbnail
+      border-width: 2px
+      width: 80px
+  .close
+    top: 0px
+    margin-left: 0px
+    margin-right: -3px
+    margin-top: -101px
+    color: black
+    opacity: 0.8
+
+.fileinput-button
+  float: none
+.progress
+  margin-top: 0px
+.img-polaroid
+  margin-bottom: 5px
+#imageModal
+  width: auto
+  height: auto
+  margin: -315px 0 0 -415px
+  .carousel
+    margin-bottom: 0px
+  .carousel-control
+    top: 50%
+  .modal-header
+    border-bottom: 0px
+  .modal-body
+    max-height: 800px
+    padding: 10px
+.fullImage
+  max-width: 800px

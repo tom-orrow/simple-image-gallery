@@ -1,0 +1,14 @@
+#newAlbumModal.modal.hide.fade{ tabindex: "-1", role: "dialog", aria: { labelledby: "New Album", hidden: "true" }}
+  = form_for(Album.new) do |f|
+    .modal-header
+      = button_tag class: "close", data: { dismiss: "modal" }, aria: { hidden: "true" } do
+        ×
+      %h3#newAlbumModalLabel New Album
+    .modal-body
+      = f.label :name
+      = f.text_field :name
+      = f.label :description
+      = f.text_area :desc, rows: 3
+    .modal-footer
+      = f.submit class: "btn btn-primary" do
+        Save

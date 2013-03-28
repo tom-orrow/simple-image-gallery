@@ -1,0 +1,25 @@
+.row
+  .span7
+    %h1 Albums
+  .span5{ style: "margin-top: 15px" }
+    %span.pull-right
+      .btn#editAlbums
+        %i.icon-edit
+      = link_to "#newAlbumModal", role: "button", class: "btn", data: { toggle: 'modal' } do
+        %i.icon-plus
+#albumsList
+  - @albums.each do |album|
+    .media
+      = link_to album, class: "pull-left thumbnail" do
+        - if album.images.first
+          = image_tag album.images.first.image.url(:thumb), class: "media-object"
+        - else
+          = image_tag "no_photo.png", class: "media-object"
+      = button_tag class: "close hide", id: album.id do
+        &times;
+      .media-body
+        %h4.media-heading
+          = link_to album.name, album
+        = album.desc
+
+= render 'form'
