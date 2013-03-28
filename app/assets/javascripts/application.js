@@ -4,5 +4,5 @@
 //= require bootstrap-carousel
 //= require jquery-fileupload/basic
 //= require jquery-fileupload/vendor/tmpl
-//= require load-image
 //= require_tree .
+//= require ../../../vendor/assets/javascripts/vendor
