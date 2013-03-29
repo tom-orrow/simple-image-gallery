@@ -8,31 +8,27 @@ class AlbumsController < ApplicationController
     ap @album.images
   end
 
-  def new
-    @album = Album.new
-  end
-
-  def edit
-    @album = Album.find(params[:id])
-  end
-
   def create
     @album = Album.new(params[:album])
 
     if @album.save
-      redirect_to @album, notice: 'Album was successfully created.'
+      render :json => {
+        partial: render_to_string(
+          'albums/_albums_list_item',
+          layout: false,
+          locals: { :album => @album })}
     else
-      render action: "new"
+      render nothing: true
     end
   end
 
-  def update
+  def update_album
     @album = Album.find(params[:id])
 
     if @album.update_attributes(params[:album])
-      redirect_to @album, notice: 'Album was successfully updated.'
+      render :json => { id: @album.id, name: @album.name, desc: @album.desc }
     else
-      render action: "edit"
+      render nothing: true
     end
   end
 

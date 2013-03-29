@@ -8,7 +8,6 @@
       = f.label :name
       = f.text_field :name
       = f.label :description
-      = f.text_area :desc, rows: 3
+      = f.text_area :desc, style: "width: 515px; height: 100px; resize:none;"
     .modal-footer
-      = f.submit class: "btn btn-primary" do
-        Save
+      = f.submit class: "btn btn-primary", value: "Save"

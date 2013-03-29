@@ -9,17 +9,6 @@
         %i.icon-plus
 #albumsList
   - @albums.each do |album|
-    .media
-      = link_to album, class: "pull-left thumbnail" do
-        - if album.images.first
-          = image_tag album.images.first.image.url(:thumb), class: "media-object"
-        - else
-          = image_tag "no_photo.png", class: "media-object"
-      = button_tag class: "close hide", id: album.id do
-        &times;
-      .media-body
-        %h4.media-heading
-          = link_to album.name, album
-        = album.desc
+    = render 'albums_list_item', album: album
 
 = render 'form'

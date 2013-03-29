@@ -30,7 +30,7 @@ jQuery ->
   $("#editAlbums").click ->
     $('.media .close').fadeToggle("slow")
 
-  $('.media .close').click ->
+  $('.remove-album').click ->
     id = $(this).attr("id")
     button = $(this)
     item = $(this).parent()
@@ -41,3 +41,29 @@ jQuery ->
       item.animate height: "0px", () ->
         item.remove()
       item.children(".thumbnail").animate height: "0px"
+
+  $('.edit-album').click ->
+    id = $(this).attr("id")
+    $("#newAlbumModal form").attr('action', '/albums/' + id + '/update_album')
+    $("#newAlbumModal #album_name").val($(this).parent().find('.media-body h4 a').text())
+    $("#newAlbumModal #album_desc").val($.trim($(this).parent().find('.media-body div').text()))
+    $("#newAlbumModalLabel").text("Edit Album")
+    $("#newAlbumModal").modal("show")
+
+  $('#newAlbumModal form').submit () ->
+    valuesToSubmit = $(this).serialize()
+    $.ajax
+      url: $(this).attr('action')
+      data: valuesToSubmit
+      method: "POST"
+      dataType: "JSON"
+      success: (json) ->
+        if typeof json.partial != 'undefined'
+          $("#albumsList").append(json.partial)
+        else
+          album = $("#album_" + json.id)
+          album.find(".media-body h4 a").text(json.name)
+          album.find(".media-body div").text(json.desc)
+          $('.media .close').fadeToggle("slow")
+        $("#newAlbumModal").modal("hide")
+    return false
