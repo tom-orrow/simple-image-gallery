@@ -5,18 +5,17 @@ class AlbumsController < ApplicationController
 
   def show
     @album = Album.find(params[:id])
-    ap @album.images
   end
 
   def create
     @album = Album.new(params[:album])
 
     if @album.save
-      render :json => {
+      render json: {
         partial: render_to_string(
           'albums/_albums_list_item',
           layout: false,
-          locals: { :album => @album })}
+          locals: { album: @album })}
     else
       render nothing: true
     end
@@ -26,7 +25,7 @@ class AlbumsController < ApplicationController
     @album = Album.find(params[:id])
 
     if @album.update_attributes(params[:album])
-      render :json => { id: @album.id, name: @album.name, desc: @album.desc }
+      render json: { id: @album.id, name: @album.name, desc: @album.desc }
     else
       render nothing: true
     end
@@ -39,11 +38,15 @@ class AlbumsController < ApplicationController
   end
 
   def add_image
-    @image = Image.create( params[:album] )
+    @image = Image.new(params[:album])
+
+    if ! @image.save
+      render nothing: true
+    end
   end
 
   def remove_image
-    @image = Image.find( params[:id] )
+    @image = Image.find(params[:id])
     @image.destroy()
     render nothing: true
   end

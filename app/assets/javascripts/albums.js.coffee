@@ -65,5 +65,10 @@ jQuery ->
           album.find(".media-body h4 a").text(json.name)
           album.find(".media-body div").text(json.desc)
           $('.media .close').fadeToggle("slow")
+
+        $("#newAlbumModal form").attr('action', '/albums')
+        $("#newAlbumModal #album_name").val("")
+        $("#newAlbumModal #album_desc").val("")
+        $("#newAlbumModalLabel").text("New Album")
         $("#newAlbumModal").modal("hide")
     return false
