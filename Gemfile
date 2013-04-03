@@ -25,6 +25,8 @@ group :production do
   gem "pg"
 end
 
+gem 'jbuilder'
+gem 'simple_form'
 gem 'jquery-rails'
 gem 'therubyracer'
 gem 'awesome_print'

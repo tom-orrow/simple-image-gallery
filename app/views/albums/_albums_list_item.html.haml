@@ -4,9 +4,9 @@
       = image_tag album.images.first.image.url(:thumb), class: "media-object"
     - else
       = image_tag "no_photo.png", class: "media-object"
-  = button_tag class: "remove-album close hide", id: album.id do
+  = link_to "#", class: "remove-album close hide", id: album.id do
     &times;
-  = button_tag class: "edit-album close hide", id: album.id do
+  = link_to "#newAlbumModal", class: "edit-album close hide", data: { toggle: 'modal' }, id: album.id do
     %i.icon-pencil
   .media-body
     %h4.media-heading

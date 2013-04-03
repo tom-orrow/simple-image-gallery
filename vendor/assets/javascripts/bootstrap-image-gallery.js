@@ -175,7 +175,6 @@
                 clone = modal.clone().hide().appendTo(document.body);
             }
             if ($(window).width() > 767) {
-                console.log(modal.outerHeight())
                 method.call(modal.stop(), {
                     'margin-top': -((img.height + 30) / 2),
                     'margin-left': -((img.width + 30) / 2)

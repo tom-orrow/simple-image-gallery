@@ -11,24 +11,33 @@ class AlbumsController < ApplicationController
     @album = Album.new(params[:album])
 
     if @album.save
-      render json: {
-        partial: render_to_string(
+      json = Jbuilder.encode do |json|
+        json.partial render_to_string(
           'albums/_albums_list_item',
           layout: false,
-          locals: { album: @album })}
+          locals: { album: @album })
+      end
     else
-      render nothing: true
+      json = Jbuilder.encode do |json|
+        json.errors @album.errors.messages.to_json
+      end
     end
+    render json: json
   end
 
   def update_album
     @album = Album.find(params[:id])
 
     if @album.update_attributes(params[:album])
-      render json: { id: @album.id, name: @album.name, desc: @album.desc }
+      json = Jbuilder.encode do |json|
+        json.call(@album, :id, :name, :desc)
+      end
     else
-      render nothing: true
+      json = Jbuilder.encode do |json|
+        json.errors @album.errors.full_messages.to_json
+      end
     end
+    render json: json
   end
 
   def remove_album

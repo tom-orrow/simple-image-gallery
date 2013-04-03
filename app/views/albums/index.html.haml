@@ -5,7 +5,7 @@
     %span.pull-right
       .btn#editAlbums
         %i.icon-edit
-      = link_to "#newAlbumModal", role: "button", class: "btn", data: { toggle: 'modal' } do
+      = link_to "#newAlbumModal", role: "openNewAlbumModal", class: "btn", data: { toggle: 'modal' } do
         %i.icon-plus
 #albumsList
   - @albums.each do |album|

@@ -44,19 +44,33 @@ jQuery ->
       item.animate height: "0px", () ->
         item.remove()
 
+  editAlbum = (editButton) ->
+    $("#newAlbumModal form").attr('action', '/albums/' + editButton.attr("id") + '/update_album')
+    $("#newAlbumModal #album_name").val(editButton.parent().find('.media-body h4 a').text())
+    $("#newAlbumModal #album_desc").val($.trim(editButton.parent().find('.media-body div').text()))
+    $("#newAlbumModal .help-block").remove()
+    $("#newAlbumModal .control-group").children().unwrap()
+    $("#newAlbumModalLabel").text("Edit Album")
+    $('#newAlbumModal .alert').hide()
+
   $(document).click (e) ->
-    if $('#editAlbums, #editImages').has(e.target).length == 0
-      $('.close').fadeOut()
+    if $('#editAlbums, #editImages').parent().has(e.target).length == 0
+      $('#albumsList, #gallery').find('.close').fadeOut()
 
   $("#editAlbums, #editImages").click ->
-    $('.close').fadeToggle()
+    $('#albumsList .close, #gallery .close').fadeToggle()
 
   $('.edit-album').click ->
-    $("#newAlbumModal form").attr('action', '/albums/' + $(this).attr("id") + '/update_album')
-    $("#newAlbumModal #album_name").val($(this).parent().find('.media-body h4 a').text())
-    $("#newAlbumModal #album_desc").val($.trim($(this).parent().find('.media-body div').text()))
-    $("#newAlbumModalLabel").text("Edit Album")
-    $("#newAlbumModal").modal("show")
+    editAlbum($(this))
+
+  $('[role="openNewAlbumModal"]').click ->
+    $("#newAlbumModal form").attr('action', '/albums')
+    $("#newAlbumModal #album_name").val("")
+    $("#newAlbumModal #album_desc").val("")
+    $("#newAlbumModal .help-block").remove()
+    $("#newAlbumModal .control-group").children().unwrap()
+    $("#newAlbumModalLabel").text("New Album")
+    $('#newAlbumModal .alert').hide()
 
   $('#newAlbumModal form').submit ->
     valuesToSubmit = $(this).serialize()
@@ -66,20 +80,21 @@ jQuery ->
       method: "POST"
       dataType: "JSON"
       success: (json) ->
-        if typeof json.partial != 'undefined'
-          $("#albumsList").append(json.partial)
+        if typeof json.errors == 'undefined'
+          if typeof json.partial != 'undefined'
+            $("#albumsList").append(json.partial)
+          else
+            album = $("#album_" + json.id)
+            album.find(".media-body h4 a").text(json.name)
+            album.find(".media-body div").text(json.desc)
+          $("#newAlbumModal").modal("hide")
+          reloadFunctions()
         else
-          album = $("#album_" + json.id)
-          album.find(".media-body h4 a").text(json.name)
-          album.find(".media-body div").text(json.desc)
-          $('.media .close').fadeToggle("slow")
-
-        $("#newAlbumModal form").attr('action', '/albums')
-        $("#newAlbumModal #album_name").val("")
-        $("#newAlbumModal #album_desc").val("")
-        $("#newAlbumModalLabel").text("New Album")
-        $("#newAlbumModal").modal("hide")
-        reloadFunctions()
+          $.each $.parseJSON(json.errors), (index, value) ->
+            $('#newAlbumModal').find('#album_' + index)
+              .wrap("<div class='control-group error'>")
+            $('#newAlbumModal').find('#album_' + index).parent()
+              .append("<p class='help-block'>" + index.charAt(0).toUpperCase() + index.slice(1) + " " + value + "</p>")
     return false
 
   reloadFunctions()
