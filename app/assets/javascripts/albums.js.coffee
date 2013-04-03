@@ -12,45 +12,53 @@ jQuery ->
       if progress == 100
         $('#progressbar').addClass("hide")
 
-  $("#editImages").click ->
-    $('#images .close').fadeToggle("slow")
+    done: (e, data) ->
+      reloadFunctions()
 
-  $('#images .close').click ->
-    id = $(this).attr("id")
-    button = $(this)
-    item = $(this).parent()
-    $.post "remove_image", { "id": id }, () ->
-      button.remove()
-      item.children(".thumbnail").css("padding-left", "0px")
-      item.children(".thumbnail").css("padding-right", "0px")
-      item.animate width: "0px", () ->
+  reloadFunctions = () ->
+    $('#images .close').click ->
+      removeImage($(this))
+    $('.remove-album').click ->
+      removeAlbum($(this))
+
+  removeImage = (closeButton) ->
+    item = closeButton.parent()
+    $.post "remove_image", { "id": closeButton.attr("id") }, () ->
+      closeButton.remove()
+      item.children(".thumbnail")
+        .css("padding-left", "0px")
+        .css("padding-right", "0px")
+        .animate(width: "0px")
+      item.animate width: "0px", ->
         item.remove()
-      item.children(".thumbnail").animate width: "0px"
 
-  $("#editAlbums").click ->
-    $('.media .close').fadeToggle("slow")
-
-  $('.remove-album').click ->
-    id = $(this).attr("id")
-    button = $(this)
-    item = $(this).parent()
-    $.post "albums/remove_album", { "id": id }, () ->
-      button.remove()
-      item.children(".thumbnail").css("padding-top", "0px")
-      item.children(".thumbnail").css("padding-bottom", "0px")
+  removeAlbum = (closeButton) ->
+    item = closeButton.parent()
+    $.post "albums/remove_album", { "id": closeButton.attr("id") }, () ->
+      closeButton.remove()
+      item.find(".edit-album").remove()
+      item.children(".thumbnail")
+        .css("padding-top", "0px")
+        .css("padding-bottom", "0px")
+        .animate height: "0px"
       item.animate height: "0px", () ->
         item.remove()
-      item.children(".thumbnail").animate height: "0px"
+
+  $(document).click (e) ->
+    if $('#editAlbums, #editImages').has(e.target).length == 0
+      $('.close').fadeOut()
+
+  $("#editAlbums, #editImages").click ->
+    $('.close').fadeToggle()
 
   $('.edit-album').click ->
-    id = $(this).attr("id")
-    $("#newAlbumModal form").attr('action', '/albums/' + id + '/update_album')
+    $("#newAlbumModal form").attr('action', '/albums/' + $(this).attr("id") + '/update_album')
     $("#newAlbumModal #album_name").val($(this).parent().find('.media-body h4 a').text())
     $("#newAlbumModal #album_desc").val($.trim($(this).parent().find('.media-body div').text()))
     $("#newAlbumModalLabel").text("Edit Album")
     $("#newAlbumModal").modal("show")
 
-  $('#newAlbumModal form').submit () ->
+  $('#newAlbumModal form').submit ->
     valuesToSubmit = $(this).serialize()
     $.ajax
       url: $(this).attr('action')
@@ -71,4 +79,7 @@ jQuery ->
         $("#newAlbumModal #album_desc").val("")
         $("#newAlbumModalLabel").text("New Album")
         $("#newAlbumModal").modal("hide")
+        reloadFunctions()
     return false
+
+  reloadFunctions()
