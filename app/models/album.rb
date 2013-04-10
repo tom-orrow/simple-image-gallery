@@ -1,6 +1,4 @@
 class Album < ActiveRecord::Base
-  attr_accessible :name
-  attr_accessible :desc
   has_many :images
 
   validates :name, length: { minimum: 5, maximum: 50 }

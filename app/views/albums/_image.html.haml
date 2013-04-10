@@ -1,6 +1,6 @@
 %li.span2
-  = link_to image.image.url, id: image.id, class: "thumbnail", data: { gallery: "gallery" } do
-    = image_tag image.image.url(:thumb)
+  = link_to image.file.url, id: image.id, class: "thumbnail", data: { gallery: "gallery" } do
+    = image_tag image.file.url(:thumb)
   = link_to "#", class: "close hide", id: image.id do
     &times;
 

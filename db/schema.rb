@@ -9,25 +9,22 @@
 # from scratch. The latter is a flawed and unsustainable approach (the more migrations
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
-# It's strongly recommended to check this file into your version control system.
+# It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130330084258) do
+ActiveRecord::Schema.define(version: 20130410020513) do
 
-  create_table "albums", :force => true do |t|
+  create_table "albums", force: true do |t|
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.text     "desc"
   end
 
-  create_table "images", :force => true do |t|
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+  create_table "images", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "album_id"
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
-    t.datetime "image_updated_at"
+    t.string   "file"
   end
 
 end
