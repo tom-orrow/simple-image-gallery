@@ -4,6 +4,7 @@
 jQuery ->
   $('#fileupload').fileupload
     dataType: "script"
+    paramName: 'image[file]'
 
     progressall: (e, data) ->
       progress = parseInt(data.loaded / data.total * 100, 10)
@@ -54,7 +55,7 @@ jQuery ->
     $('#newAlbumModal .alert').hide()
 
   $(document).click (e) ->
-    if $('#editAlbums, #editImages').parent().has(e.target).length == 0
+    if $('#editAlbums, #editImages, .close').parent().has(e.target).length == 0
       $('#albumsList, #gallery').find('.close').fadeOut()
 
   $("#editAlbums, #editImages").click ->
@@ -90,7 +91,7 @@ jQuery ->
           $("#newAlbumModal").modal("hide")
           reloadFunctions()
         else
-          $.each $.parseJSON(json.errors), (index, value) ->
+          $.each json.errors, (index, value) ->
             $('#newAlbumModal').find('#album_' + index)
               .wrap("<div class='control-group error'>")
             $('#newAlbumModal').find('#album_' + index).parent()

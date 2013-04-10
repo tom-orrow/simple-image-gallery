@@ -1,4 +1,6 @@
 class AlbumsController < ApplicationController
+  include AlbumsHelper
+
   def index
     @albums = Album.all
   end
@@ -8,55 +10,40 @@ class AlbumsController < ApplicationController
   end
 
   def create
-    @album = Album.new(params[:album])
-
-    if @album.save
-      json = Jbuilder.encode do |json|
-        json.partial render_to_string(
-          'albums/_albums_list_item',
-          layout: false,
-          locals: { album: @album })
-      end
-    else
-      json = Jbuilder.encode do |json|
-        json.errors @album.errors.messages.to_json
-      end
-    end
-    render json: json
+    @album = Album.create!(album_params)
+    render json: { partial: render_to_string(
+      'albums/_albums_list_item',
+      layout: false,
+      locals: { album: @album }
+    )}
+  rescue => e
+    render json: { errors: e.record.errors }
   end
 
   def update_album
     @album = Album.find(params[:id])
-
-    if @album.update_attributes(params[:album])
-      json = Jbuilder.encode do |json|
-        json.call(@album, :id, :name, :desc)
-      end
-    else
-      json = Jbuilder.encode do |json|
-        json.errors @album.errors.full_messages.to_json
-      end
-    end
-    render json: json
+    @album.update_attributes!(album_params)
+    render json: @album.slice(:id, :name, :desc)
+  rescue => e
+    render json: { errors: e.record.errors }
   end
 
   def remove_album
-    @album = Album.find(params[:id])
-    @album.destroy
-    render nothing: true
+    Album.find(params[:id]).destroy
+    render nothing: true, status: :ok
   end
 
   def add_image
-    @image = Image.new(params[:album])
-
-    if ! @image.save
-      render nothing: true
-    end
+    i = image_params
+    @image = Image.new(i)
+    @image.save
+  rescue => e
+    ap e
+    render json: { errors: e.record.errors }
   end
 
   def remove_image
-    @image = Image.find(params[:id])
-    @image.destroy()
-    render nothing: true
+    Image.find(params[:id]).destroy
+    render nothing: true, status: :ok
   end
 end

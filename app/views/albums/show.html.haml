@@ -9,9 +9,9 @@
         %i.icon-edit
       .btn.fileinput-button
         %i.icon-folder-open
-          = form_for @album, :url => add_image_album_path, :html => { multipart: true, id: "fileupload" } do |f|
+          = form_for Image.new, url: add_image_album_path, html: { multipart: true, id: "fileupload" } do |f|
             = f.hidden_field :album_id, value: @album.id
-            = f.file_field :image, multiple: true, name: "album[image]"
+            = f.file_field :file, multiple: true
 
 #gallery{ data: { toggle: "modal-gallery", target: "#modal-gallery" }}
   %ul#images.thumbnails
